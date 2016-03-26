@@ -1,5 +1,72 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http//www.w3.org/2001/XMLSchema">
-
+<xs:schema xmlns:xs="http//www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    
+    <xs:simpleType name="Ttime">
+        <xs:restriction base="xs:integer">
+            <xs:pattern value="[0-2][0-9]:[0-5][0-9]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="Tcourse">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="tutorial"/>
+            <xs:enumeration value="lecture"/>
+            <xs:enumeration value="lab"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="Tday">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Mon"/>
+            <xs:enumeration value="Tue"/>
+            <xs:enumeration value="Wed"/>
+            <xs:enumeration value="Thu"/>
+            <xs:enumeration value="Fri"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:element name="timetable">
+        <xs:complexType>
+            <xs:choice> <!-- could this be xs:sequence? -->
+                <xs:element name="course" type="Tcourseid"/>
+                <xs:element name="timeslot" type="Ttimeslot"/>
+                <xs:element name="day" type="Tday1"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="Tcourseid">
+        <xs:sequence>
+            <xs:element name="booking" type="Tbooking" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="Ttimeslot">
+        <xs:sequence>
+            <xs:element name="booking" type="Tbooking" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="start" type="Ttime" use="required"/>
+        <xs:attribute name="end" type="Ttime" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="Tday1">
+        <xs:sequence>
+            <xs:element name="booking" type="Tbooking" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="day" type="Tday" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="Tbooking">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="instructor" type="xs:string"/>
+            <xs:element name="room" type="xs:string"/>
+            <xs:element name="timeslot" type="Ttimeslot" minOccur="0" maxOccur="1"/>
+        </xs:sequence>
+        <xs:attribute name="type" type="Tcourse" use="required"/>
+        <xs:attribute name="day" type="Tday" use="optional"/>
+    </xs:complexType>
+    
 </xs:schema>
 
